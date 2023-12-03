@@ -29,6 +29,21 @@ def solve_1(lines):
     return result
 
 
+def solve_2(lines):
+    grid = make_grid(lines)
+    stars = []
+    for k,v in grid.items():
+        if v == '*':
+            stars.append(k)
+    result = 0
+    for star_pos in stars:
+        i,j = star_pos
+        numbers = find_numbers_around(grid, i, j)
+        if len(numbers) == 2:
+            result += numbers[0]*numbers[1]
+    return result
+
+
 def make_grid(lines):
     w = len(lines[0])
     h = len(lines)
@@ -51,6 +66,32 @@ def does_touch_sym(grid, i, j):
     return False
 
 
+def find_numbers_around(grid, i, j):
+    incs = [(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1]]
+    result = set()
+    for inc in incs:
+        n = find_number_at(grid, i+inc[0], j+inc[1])
+        if n is not None:
+            result.add(n)
+    return list(result)
+
+
+def find_number_at(grid, i, j):
+    c = grid[(i, j)]
+    if not c.isdigit():
+        return None
+    # step back
+    k = 0
+    while grid[(i, j+k-1)].isdigit():
+        k -= 1
+    # count
+    n = 0
+    while grid[(i, j+k)].isdigit():
+        n = 10*n + int(grid[(i, j+k)])
+        k += 1
+    return n
+
+
 ex = """467..114..
 ...*......
 ..35..633.
@@ -68,3 +109,4 @@ lines = ex
 # lines = open(0).read()[:-1].split('\n')
 
 print(solve_1(lines))
+print(solve_2(lines))
