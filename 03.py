@@ -1,4 +1,7 @@
+from collections import defaultdict
+
 def solve_1(lines):
+    grid = make_grid(lines)
     w = len(lines[0])
     h = len(lines)
     result = 0
@@ -14,7 +17,7 @@ def solve_1(lines):
                     is_connected = False
                 else:
                     n = 10*n+int(c)
-            if does_touch_sym(lines, i, j):
+            if does_touch_sym(grid, i, j):
                 is_connected = True
 
             # End recording a number
@@ -26,19 +29,23 @@ def solve_1(lines):
     return result
 
 
-def does_touch_sym(lines, i, j):
+def make_grid(lines):
     w = len(lines[0])
     h = len(lines)
+    grid = defaultdict(lambda:'.')
+    for i in range(h):
+        for j in range(w):
+            grid[(i, j)] = lines[i][j]
+    return grid
+
+
+def does_touch_sym(grid, i, j):
     incs = [(i, j) for i in [-1, 0, 1] for j in [-1, 0, 1]]
     result = False
     for inc in incs:
         target_i = i+inc[0]
         target_j = j+inc[1]
-        if target_i < 0 or h <= target_i:
-            continue
-        if target_j < 0 or w <= target_j:
-            continue
-        c = lines[target_i][target_j]
+        c = grid[(target_i,target_j)]
         if c != '.' and not c.isdigit():
             return True
     return False
