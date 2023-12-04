@@ -1,4 +1,4 @@
-ParseColor ← ≡(parse⇌↘2⇌⊔) regex ⊙⊔ ⊂"[0-9]+ "
+ParseColor ← ≡(parse⇌↘2⇌⊔⊢) regex ⊙⊔ ⊂"[0-9]+ "
 
 SolveOne ← /+×+1⇡⧻./↧≤12_13_14⊐∵/↥
 SolveTwo ← /+/×⊐∵/↥
