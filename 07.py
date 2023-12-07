@@ -2,7 +2,18 @@ from itertools import groupby
 
 
 def solve_1(game):
-    with_strength = [((kind(hand[0]), values(hand[0])), hand[0], hand[1]) for hand in game]
+    with_strength = [((kind(hand[0]), values(hand[0])), hand[0], hand[1])
+            for hand in game]
+    return solve(with_strength)
+
+
+def solve_2(game):
+    with_strength = [((highest_kind(hand[0]), values(hand[0], True)), hand[0], hand[1])
+            for hand in game]
+    return solve(with_strength)
+
+
+def solve(with_strength):
     result = 0
     previous_s = None
     for i, v in enumerate(sorted(with_strength)):
@@ -45,8 +56,20 @@ def kind(cards):
     assert(False)
 
 
-def values(cards):
+def highest_kind(cards):
+    if cards == 'JJJJJ':
+        return 6
+    result = 0
+    for r in ['A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2']:
+        new = kind(cards.replace('J', r))
+        result = max(result, new)
+    return result
+
+
+def values(cards, p2=False):
     conf = { 'T': 'a', 'J': 'b', 'Q': 'c', 'K': 'd', 'A': 'e' }
+    if p2:
+        conf = { 'T': 'a', 'J': '0', 'Q': 'c', 'K': 'd', 'A': 'e' }
     result = ''
     for c in cards:
         if c in conf:
@@ -67,3 +90,4 @@ txt = ex
 lines = txt[:-1].split('\n')
 game = [(line.split()[0], int(line.split()[1])) for line in lines]
 print(solve_1(game))
+print(solve_2(game))
