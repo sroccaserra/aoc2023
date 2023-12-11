@@ -1,11 +1,11 @@
 Exprs ← {"^zero""^one""^two""^three""^four""^five""^six""^seven""^eight""^nine"}
 Parts ← ♭⊠(□↘)⊙¤⇡⧻.
-LiterateDigits ← /+×⇡10⊞(⧻regex∩⊔)Exprs Parts
+LiterateDigits ← /+×⇡10⊞(⧻regex∩°□)Exprs Parts
 Digits ← ×<10.-@0
 FilterAndSum ← +×10⊃⊢(⊢⇌)▽>0.
 
-SolveOne ← /+≡(FilterAndSum Digits ⊔)
-SolveTwo ← /+≡(FilterAndSum +⊃Digits LiterateDigits ⊔)
+SolveOne ← /+≡(FilterAndSum Digits °□)
+SolveTwo ← /+≡(FilterAndSum +⊃Digits LiterateDigits °□)
 
 ⊃SolveTwo SolveOne ⊜□≠@\n. &fras"01"
 
