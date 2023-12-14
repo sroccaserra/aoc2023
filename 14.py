@@ -2,41 +2,38 @@ from collections import defaultdict
 
 
 def solve_1(lines):
-    grid = build_empty_grid(lines)
-    tilted = []
-    for i, line in enumerate(lines):
-        for j, c in enumerate(line):
-            if c == 'O':
-                fall(grid, i, j)
-    result = 0
+    grid = build_grid(lines)
     w = len(lines[0])
-    for i, line in enumerate(lines):
+    h = len(lines)
+    for i in range(h):
+        for j in range(w):
+            if grid[i, j] == 'O':
+                fall(grid, -1, 0, i, j)
+    result = 0
+    for i in range(h):
         for j in range(w):
             if grid[i, j] == 'O':
                 result += w-i
     return result
 
 
-def build_empty_grid(lines):
+def build_grid(lines):
     grid = defaultdict(lambda: '#')
     w = len(lines[0])
     h = len(lines)
     for i in range(h):
         line = lines[i]
         for j in range(w):
-            c = line[j]
-            if c == 'O':
-                grid[i, j] = '.'
-            else:
-                grid[i,j] = c
+            grid[i,j] = line[j]
     return grid
 
 
-def fall(grid, i, j):
-    below = i
-    while grid[below, j] == '.':
-        below -= 1
-    grid[below+1, j] = 'O'
+def fall(grid, vec_i, vec_j, i, j):
+    grid[i,j] = '.'
+    while grid[i+vec_i, j+vec_j] == '.':
+        i += vec_i
+        j += vec_j
+    grid[i, j] = 'O'
 
 
 ex = """O....#....
@@ -51,6 +48,6 @@ O.#..O.#.#
 #OO..#....
 """
 text = ex
-text = open(0).read()
+# text = open(0).read()
 lines = text.split('\n')[:-1]
 print(solve_1(lines))
