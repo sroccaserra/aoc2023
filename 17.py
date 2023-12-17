@@ -1,4 +1,5 @@
 from collections import deque
+from heapq import heappush, heappop
 
 
 HUGE = 999999999
@@ -19,9 +20,9 @@ def solve(matrix, neighbors_fn, min_to_stop = 0):
     start_1 = (0, (0, 0, 0, 1, 0))  # ((i, j, di, dj, n), h)
     start_2 = (0, (0, 0, 1, 0, 0))  # ((i, j, di, dj, n), h)
     seen = {start_1: HUGE, start_2: HUGE}
-    q = deque([start_1, start_2])
-    while q:
-        heat, node = q.popleft()
+    hq = [start_1, start_2]
+    while hq:
+        heat, node = heappop(hq)
         for n in neighbors_fn(w, h, node):
             ni = n[0]
             nj = n[1]
@@ -30,7 +31,7 @@ def solve(matrix, neighbors_fn, min_to_stop = 0):
                 continue
             if (not at_end(w, h, n) or min_to_stop <= n[4]):
                 seen[n] = new_heat
-                q.append((new_heat, n))
+                heappush(hq, (new_heat, n))
     return min([v for k, v in seen.items() if at_end(w, h, k)])
 
 
