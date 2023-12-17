@@ -16,12 +16,12 @@ def solve_2(matrix):
 def solve(matrix, neighbors_fn, min_to_stop = 0):
     w = len(matrix[0])
     h = len(matrix)
-    start_1 = ((0, 0, 0, 1, 0), 0)  # ((i, j, di, dj, n), h)
-    start_2 = ((0, 0, 1, 0, 0), 0)  # ((i, j, di, dj, n), h)
+    start_1 = (0, (0, 0, 0, 1, 0))  # ((i, j, di, dj, n), h)
+    start_2 = (0, (0, 0, 1, 0, 0))  # ((i, j, di, dj, n), h)
     seen = {start_1: HUGE, start_2: HUGE}
     q = deque([start_1, start_2])
     while q:
-        node, heat = q.popleft()
+        heat, node = q.popleft()
         for n in neighbors_fn(w, h, node):
             ni = n[0]
             nj = n[1]
@@ -30,7 +30,7 @@ def solve(matrix, neighbors_fn, min_to_stop = 0):
                 continue
             if (not at_end(w, h, n) or min_to_stop <= n[4]):
                 seen[n] = new_heat
-                q.append((n, new_heat))
+                q.append((new_heat, n))
     return min([v for k, v in seen.items() if at_end(w, h, k)])
 
 
