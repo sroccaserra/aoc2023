@@ -16,16 +16,79 @@ def solve_1(instructions):
             y += n
         if d == 'L':
             for k in range(n):
-                seen.add((x-k, y))
+                seen.add((x - k, y))
             x -= n
         if d == 'R':
             for k in range(n):
-                seen.add((x+k, y))
+                seen.add((x + k, y))
             x += n
         polygon.append((x, y))
         seen.add((x, y))
     flood_fill(seen, 1, 1)
     return len(seen)
+
+
+def solve_2(instructions):
+    polygon = read_polygon(instructions)
+    ys = sorted(list(set([y for _, y in polygon])))
+    verts = []
+    for i in range(len(polygon)-1):
+        p1 = polygon[i]
+        p2 = polygon[i+1]
+        if p1[1] != p2[1]:
+            assert(p1[0] == p2[0])
+            verts.append(tuple(sorted([p1, p2])))
+    rects = []
+    for i in range(len(ys) - 1):
+        top = ys[i]
+        bottom = ys[i+1]
+        mid = (top + bottom)/2
+        xs = []
+        for (p1, p2) in verts:
+            assert(mid != p1[1])
+            assert(mid != p2[1])
+            assert p1[0] == p2[0]
+            if p1[1] < mid < p2[1]:
+                xs.append(p1[0])
+        xs.sort()
+        assert(len(xs)%2 == 0)
+        for i in range(len(xs)//2):
+            left = xs[2*i]
+            right = xs[2*i+1]
+            assert left != right
+            assert top != bottom
+            rects.append((left, top, right, bottom))
+    result = 0
+    for left, top, right, bottom in rects:
+        w = right - left
+        h = bottom - top
+        assert w > 0
+        assert h > 0
+        result += w*h
+    length = 0
+    for i in range(len(polygon)-1):
+        x1, y1 = polygon[i]
+        x2, y2 = polygon[i+1]
+        length += (abs(x2-x1) + abs(y2-y1))
+    return result + length//2 + 1
+
+
+def read_polygon(isntructions):
+    x, y = 0, 0
+    polygon:list[tuple] = [(0, 0)]
+    for _, _, h in instructions:
+        d = ['R', 'D', 'L', 'U'][int(h[-1])]
+        n = int(h[:-1], 16)
+        if d == 'U':
+            y -= n
+        if d == 'D':
+            y += n
+        if d == 'L':
+            x -= n
+        if d == 'R':
+            x += n
+        polygon.append((x, y))
+    return polygon
 
 
 def flood_fill(seen, x, y):
@@ -63,3 +126,4 @@ text = ex
 # text = open(0).read()
 instructions = [parse(line) for line in text.splitlines()]
 print(solve_1(instructions))
+print(solve_2(instructions))
