@@ -32,3 +32,6 @@ points inside. It also use the Euler formula that gives the relation v - e + f
 and faces.
 
 - <https://en.wikipedia.org/wiki/Planar_graph#Euler's_formula>
+
+In Haskell, `Data.Sequence` is probably a good enough "random
+access" data structure.
