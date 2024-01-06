@@ -1,3 +1,5 @@
+Note: deprecated, see <https://github.com/sroccaserra/advent-of-code>
+
 Advent of [bad] Code, 2023 edition
 
 - <https://adventofcode.com>
